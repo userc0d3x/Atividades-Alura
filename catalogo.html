@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Filmes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Tela de carregamento */
+        #loader {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 9999;
+        }
+
+        .spinner {
+            border: 6px solid rgba(255, 0, 0, 0.2);
+            border-top: 6px solid #ff0000;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+            box-shadow: 0 0 10px red;
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg);} 100% { transform: rotate(360deg);} }
+
+        #loader h2 { color: #ff0000; text-shadow: 0 0 10px red, 0 0 20px red; }
+
+        header {
+            background-color: #111;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(255,0,0,0.5);
+        }
+
+        header h1 { margin: 0; color: #ff0000; text-shadow: 0 0 10px red, 0 0 20px red; }
+
+        .catalogo {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .card {
+            background-color: #111;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(255,0,0,0.5);
+            border: 1px solid red;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .card:hover { transform: scale(1.05); box-shadow: 0 0 20px red, 0 0 40px red; }
+
+        .card img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;          /* evita distorção */
+            background-color: #000;
+        }
+
+        .info { padding: 15px; }
+
+        .info h2 { margin: 0 0 10px; font-size: 1.3rem; color: #ff0000; text-shadow: 0 0 5px red, 0 0 10px red; }
+
+        .info p { font-size: 0.9rem; color: #ccc; line-height: 1.4; }
+
+        .nota { margin-top: 10px; font-weight: bold; color: #ff4d4d; text-shadow: 0 0 5px red; }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.9);
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .modal-content {
+            background-color: #111;
+            padding: 20px;
+            border: 1px solid red;
+            box-shadow: 0 0 20px red;
+            border-radius: 10px;
+            max-width: 600px;
+            width: 90%;
+            color: white;
+            text-align: center;
+            animation: slideUp 0.4s ease;
+        }
+
+        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        .close { color: red; float: right; font-size: 28px; font-weight: bold; cursor: pointer; text-shadow: 0 0 5px red; }
+
+        .btn-trailer {
+            display: inline-block; margin-top: 15px; padding: 10px 20px;
+            border: 1px solid red; background-color: transparent; color: red;
+            font-weight: bold; text-decoration: none; border-radius: 5px;
+            transition: all 0.3s ease; box-shadow: 0 0 5px red;
+        }
+        .btn-trailer:hover { background-color: red; color: black; box-shadow: 0 0 20px red; }
+    </style>
+</head>
+<body>
+
+    <!-- Tela de carregamento -->
+    <div id="loader">
+        <div class="spinner"></div>
+        <h2>Catálogo de Filmes</h2>
+    </div>
+
+    <header>
+        <h1>🎬 Filmes</h1>
+    </header>
+
+    <section class="catalogo">
+        <!-- Inception -->
+        <div class="card"
+             data-title="Inception"
+             data-desc="Um ladrão que invade sonhos precisa realizar a missão impossível: plantar uma ideia na mente de alguém."
+             data-nota="⭐ 9.0"
+             data-trailer="https://www.youtube.com/watch?v=5EiV_HXIIGs">
+            <img
+                src="https://m.media-amazon.com/images/I/912AErFSBHL._UF894,1000_QL80_.jpg"
+                alt="Pôster de Inception"
+                loading="lazy" decoding="async" referrerpolicy="no-referrer">
+            <div class="info">
+                <h2>Inception</h2>
+                <p>Um ladrão que invade sonhos precisa realizar a missão impossível: plantar uma ideia...</p>
+                <div class="nota">⭐ 9.0</div>
+            </div>
+        </div>
+
+        <!-- Interstellar -->
+        <div class="card"
+             data-title="Interstellar"
+             data-desc="Exploradores viajam através de um buraco de minhoca para salvar a humanidade de sua extinção."
+             data-nota="⭐ 8.6"
+             data-trailer="https://www.youtube.com/watch?v=2LqzF5WauAw">
+            <img
+                src="https://upload.wikimedia.org/wikipedia/en/b/bc/Interstellar_film_poster.jpg"
+                alt="Pôster de Interstellar"
+                loading="lazy" decoding="async" referrerpolicy="no-referrer">
+            <div class="info">
+                <h2>Interstellar</h2>
+                <p>Exploradores viajam através de um buraco de minhoca para salvar a humanidade...</p>
+                <div class="nota">⭐ 8.6</div>
+            </div>
+        </div>
+
+        <!-- +4 filmes de canais/conteúdos oficiais -->
+
+        <!-- The Dark Knight -->
+        <div class="card"
+             data-title="The Dark Knight"
+             data-desc="Batman enfrenta o Coringa, um criminoso caótico que ameaça Gotham."
+             data-nota="⭐ 9.0"
+             data-trailer="https://www.youtube.com/watch?v=LDG9bisJEaI">
+            <img
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTE_3g88pN5seiR0uV3-fJ2Jt981qQ9J7dWfQ&s"
+                alt="Pôster de The Dark Knight"
+                loading="lazy" decoding="async" referrerpolicy="no-referrer">
+            <div class="info">
+                <h2>The Dark Knight</h2>
+                <p>Batman enfrenta o Coringa, um criminoso caótico que ameaça Gotham...</p>
+                <div class="nota">⭐ 9.0</div>
+            </div>
+        </div>
+
+        <!-- Avatar (2009) -->
+        <div class="card"
+             data-title="Avatar"
+             data-desc="Um ex-fuzileiro assume um avatar em Pandora e precisa decidir de que lado está."
+             data-nota="⭐ 7.8"
+             data-trailer="https://www.youtube.com/watch?v=5PSNL1qE6VY">
+            <img
+                src="https://m.media-amazon.com/images/I/91N1lG+LBIS._UF894,1000_QL80_.jpg"
+                alt="Pôster de Avatar (2009)"
+                loading="lazy" decoding="async" referrerpolicy="no-referrer">
+            <div class="info">
+                <h2>Avatar</h2>
+                <p>Um ex-fuzileiro assume um avatar em Pandora e precisa decidir de que lado está...</p>
+                <div class="nota">⭐ 7.8</div>
+            </div>
+        </div>
+
+        <!-- Gladiator -->
+        <div class="card"
+             data-title="Gladiator"
+             data-desc="Um general romano busca vingança após ser traído e escravizado."
+             data-nota="⭐ 8.5"
+             data-trailer="https://www.youtube.com/watch?v=yzkgWalPZYg">
+            <img
+                src="https://upload.wikimedia.org/wikipedia/en/thumb/f/fb/Gladiator_%282000_film_poster%29.png/250px-Gladiator_%282000_film_poster%29.png"
+                alt="Pôster de Gladiator"
+                loading="lazy" decoding="async" referrerpolicy="no-referrer">
+            <div class="info">
+                <h2>Gladiator</h2>
+                <p>Um general romano busca vingança após ser traído e escravizado...</p>
+                <div class="nota">⭐ 8.5</div>
+            </div>
+        </div>
+
+        <!-- Jurassic Park -->
+        <div class="card"
+             data-title="Jurassic Park"
+             data-desc="Dinossauros clonados escapam em um parque temático e o caos começa."
+             data-nota="⭐ 8.2"
+             data-trailer="https://www.youtube.com/watch?v=dldhikz5n1A">
+            <img
+                src="https://upload.wikimedia.org/wikipedia/en/e/e7/Jurassic_Park_poster.jpg"
+                alt="Pôster de Jurassic Park"
+                loading="lazy" decoding="async" referrerpolicy="no-referrer">
+            <div class="info">
+                <h2>Jurassic Park</h2>
+                <p>Dinossauros clonados escapam em um parque temático e o caos começa...</p>
+                <div class="nota">⭐ 8.2</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="modal-title"></h2>
+            <p id="modal-desc"></p>
+            <div id="modal-nota"></div>
+            <a id="modal-trailer" class="btn-trailer" target="_blank" rel="noopener noreferrer">Ver Trailer</a>
+        </div>
+    </div>
+
+    <script>
+        // Tela de carregamento
+        window.addEventListener("load", function () {
+            setTimeout(() => {
+                document.getElementById("loader").style.display = "none";
+            }, 2000);
+        });
+
+        // Modal
+        const modal = document.getElementById("modal");
+        const modalTitle = document.getElementById("modal-title");
+        const modalDesc = document.getElementById("modal-desc");
+        const modalNota = document.getElementById("modal-nota");
+        const modalTrailer = document.getElementById("modal-trailer");
+        const closeModal = document.querySelector(".close");
+
+        document.querySelectorAll(".card").forEach(card => {
+            card.addEventListener("click", () => {
+                modalTitle.textContent = card.dataset.title;
+                modalDesc.textContent = card.dataset.desc;
+                modalNota.textContent = card.dataset.nota;
+                modalTrailer.href = card.dataset.trailer;
+                modal.style.display = "flex";
+            });
+        });
+
+        closeModal.addEventListener("click", () => { modal.style.display = "none"; });
+        window.addEventListener("click", (event) => { if (event.target === modal) modal.style.display = "none"; });
+    </script>
+</body>
+</html>
